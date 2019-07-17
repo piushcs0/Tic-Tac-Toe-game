@@ -1,0 +1,317 @@
+package com.example.tic;
+
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    Button b00,b01,b02,b10,b11,b12,b20,b21,b22,bReset;
+    TextView tvInfo;
+
+    boolean player_x=true;
+
+    int turnCount=0;
+    int[][] boardStatus = new int[3][3];
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+
+        b00 = (Button)findViewById(R.id.button_00);
+        b01 = (Button)findViewById(R.id.button_01);
+        b02 = (Button)findViewById(R.id.button_02);
+        b10 = (Button)findViewById(R.id.button_10);
+        b11 = (Button)findViewById(R.id.button_11);
+        b12 = (Button)findViewById(R.id.button_12);
+        b20 = (Button)findViewById(R.id.button_20);
+        b21 = (Button)findViewById(R.id.button_21);
+        b22 = (Button)findViewById(R.id.button_22);
+
+        bReset = (Button)findViewById(R.id.reset);
+
+        tvInfo = (TextView)findViewById(R.id.player1) ;
+
+
+        bReset.setOnClickListener(this);
+
+        b00.setOnClickListener(this);
+        b01.setOnClickListener(this);
+        b02.setOnClickListener(this);
+
+        b10.setOnClickListener(this);
+        b11.setOnClickListener(this);
+        b12.setOnClickListener(this);
+
+        b20.setOnClickListener(this);
+        b21.setOnClickListener(this);
+        b22.setOnClickListener(this);
+
+        initializeBoardStatus();
+
+
+    }
+    @Override
+    public void onClick(View v) {
+
+        switch(v.getId()){
+            case R.id.button_00:
+                if(player_x){
+                    b00.setText("X");
+                    boardStatus[0][0]=1;
+                }
+                else{
+                    b00.setText("0");
+                    boardStatus[0][0]=0;
+                }
+                b00.setEnabled(false);
+                continu();
+                break;
+
+            case R.id.button_01:
+                if(player_x){
+                    b01.setText("X");
+                    boardStatus[0][1]=1;
+                }
+                else{
+                    b01.setText("0");
+                    boardStatus[0][1]=0;
+                }
+                b01.setEnabled(false);
+                continu();
+                break;
+
+            case R.id.button_02:
+                if(player_x){
+                    b02.setText("X");
+                    boardStatus[0][2]=1;
+                }
+                else{
+                    b02.setText("0");
+                    boardStatus[0][2]=0;
+                }
+                b02.setEnabled(false);
+                continu();
+                break;
+
+            case R.id.button_10:
+                if(player_x){
+                    b10.setText("X");
+                    boardStatus[1][0]=1;
+                }
+                else{
+                    b10.setText("0");
+                    boardStatus[1][0]=0;
+                }
+                b10.setEnabled(false);
+                continu();
+                break;
+
+            case R.id.button_11:
+                if(player_x){
+                    b11.setText("X");
+                    boardStatus[1][1]=1;
+                }
+                else{
+                    b11.setText("0");
+                    boardStatus[1][1]=0;
+                }
+                b11.setEnabled(false);
+                continu();
+                break;
+
+            case R.id.button_12:
+                if(player_x){
+                    b12.setText("X");
+                    boardStatus[1][2]=1;
+                }
+                else{
+                    b12.setText("0");
+                    boardStatus[1][2]=0;
+                }
+                b12.setEnabled(false);
+                continu();
+                break;
+
+            case R.id.button_20:
+                if(player_x){
+                    b20.setText("X");
+                    boardStatus[2][0]=1;
+                }
+                else{
+                    b20.setText("0");
+                    boardStatus[2][0]=0;
+                }
+                b20.setEnabled(false);
+                continu();
+                break;
+
+            case R.id.button_21:
+                if(player_x){
+                    b21.setText("X");
+                    boardStatus[2][1]=1;
+                }
+                else{
+                    b21.setText("0");
+                    boardStatus[2][1]=0;
+                }
+                b21.setEnabled(false);
+                continu();
+                break;
+
+            case R.id.button_22:
+                if(player_x){
+                    b22.setText("X");
+                    boardStatus[2][2]=1;
+                }
+                else{
+                    b22.setText("0");
+                    boardStatus[2][2]=0;
+                }
+                b22.setEnabled(false);
+                continu();
+                break;
+            case R.id.reset:
+                resetBoard();
+                buttonEnabling();
+                initializeBoardStatus();
+                player_x=true;
+                setInfo("Player x turn");
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
+
+    public void resetBoard(){
+        b00.setText("");
+        b01.setText("");
+        b02.setText("");
+        b10.setText("");
+        b11.setText("");
+        b12.setText("");
+        b20.setText("");
+        b21.setText("");
+        b22.setText("");
+        turnCount = 0;
+    }
+
+    public void buttonEnabling(){
+        b00.setEnabled(true);
+        b01.setEnabled(true);
+        b02.setEnabled(true);
+        b10.setEnabled(true);
+        b11.setEnabled(true);
+        b12.setEnabled(true);
+        b20.setEnabled(true);
+        b21.setEnabled(true);
+        b22.setEnabled(true);
+    }
+
+
+    public void initializeBoardStatus(){
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                boardStatus[i][j] = -1;
+            }
+        }
+    }
+
+    public void continu(){
+        turnCount++;
+        player_x=!player_x;
+
+        if(player_x)
+            setInfo("Player x turn");
+        else
+            setInfo("Player 0 turn");
+        checkWinner();
+    }
+
+    public void checkWinner(){
+        int f=0;
+        for(int i=0;i<3;i++){
+            if(boardStatus[i][0]==boardStatus[i][1] && boardStatus[i][0]==boardStatus[i][2]){
+                if(boardStatus[i][0]==1) {
+                    f=1;
+                    result("Player x is winner");
+                    break;
+                }
+                else if(boardStatus[i][0]==0){
+                    f=1;
+                    result("Player 0 is winner");
+                    break;
+                }
+            }
+        }
+
+        for(int i=0;i<3;i++){
+            if(boardStatus[0][i]==boardStatus[1][i] && boardStatus[0][i]==boardStatus[2][i]){
+                if(boardStatus[0][i]==1) {
+                    f=1;
+                    result("Player x is winner");
+                    break;
+                }
+                else if(boardStatus[0][i]==0){
+                    f=1;
+                    result("Player 0 is winner");
+                    break;
+                }
+            }
+        }
+
+        if(boardStatus[0][0]==boardStatus[1][1] && boardStatus[0][0]==boardStatus[2][2]){
+            if(boardStatus[0][0]==1) {
+                f=1;
+                result("Player x is winner");
+            }
+            else if(boardStatus[0][0]==0){
+                f=1;
+                result("Player 0 is winner");
+            }
+        }
+
+        if(boardStatus[0][2]==boardStatus[1][1] && boardStatus[0][2]==boardStatus[2][0]){
+            if(boardStatus[0][2]==1) {
+                f=1;
+                result("Player x is winner");
+            }
+            else if(boardStatus[0][2]==0){
+                f=1;
+                result("Player 0 is winner");
+            }
+        }
+
+        if(f==0 && turnCount==9)
+            result("Match Draw");
+    }
+
+
+
+    public void result(String s){
+        setInfo(s);
+        b00.setEnabled(false);
+        b01.setEnabled(false);
+        b02.setEnabled(false);
+        b10.setEnabled(false);
+        b11.setEnabled(false);
+        b12.setEnabled(false);
+        b20.setEnabled(false);
+        b21.setEnabled(false);
+        b22.setEnabled(false);
+    }
+
+
+    public void setInfo(String s){
+        tvInfo.setText(s);
+    }
+}
